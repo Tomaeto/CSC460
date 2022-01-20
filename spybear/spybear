@@ -1,0 +1,60 @@
+#!/bin/bash
+
+#Adrian Faircloth
+#01/19/22
+#CSC460
+
+#Program 1: Spybear
+#Displays info of Assemble users based on command-line input
+
+
+#Printing columns of info table
+echo -e "USERID\t\t    NAME\t\t    PHONE\t\tTTY\t\tWHAT\n"
+
+#If no arguments were passed in, fill list w/ all users logged in to Assemble
+if (test $# = 0) then 
+	list=`who | cut -d" " -f1 | sort -u`
+		
+#If argument(s) were passed in, put each into list
+else
+	list=$*
+fi
+
+#If command-line argument is "all", fill list w/ all CSC460 students
+if (test "$list" = "all") then
+	list=`grep BETHE460BEAR /etc/passwd | cut -d":" -f1 | sort -u`
+fi
+
+#Printing info for each user stored in list
+for user in $list
+do
+	#Getting name of user from password file
+	name=`grep $user /etc/passwd | cut -d":" -f5 | cut -d"," -f1`
+
+	#Getting first 8 chars of user ID for searching in `w` list
+	shortusr=${user:0:8}
+
+	#If user name is less than 15 chars, add spaces for standardized formatting
+	while (test ${#name} -le 15)
+	do
+		name="$name "
+	done
+
+	#Getting user's phone number fron password file
+	phone=`grep $user /etc/passwd | cut -d":" -f5 | cut -d"," -f3` 	
+
+	#Getting user's terminal using `w` command
+	tty=`w | grep $shortusr | cut -c10-15`
+
+	#If tty is empty, user is not logged in, so set tty and what accordingly
+	if (test "$tty" = "") then
+		tty="NOT ON"
+		what="-"
+	else
+		#If user is logged in, get user's current action from `w` command
+		what=`w | grep $shortusr | cut -c65-`
+	fi
+
+	#Printing user info
+	echo -e "$user \t $name \t $phone\t       $tty \t\t $what"
+done
