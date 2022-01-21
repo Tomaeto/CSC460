@@ -44,15 +44,21 @@ do
 	phone=`grep $user /etc/passwd | cut -d":" -f5 | cut -d"," -f3` 	
 
 	#Getting user's terminal using `w` command
-	tty=`w | grep $shortusr | cut -c10-15`
+	tty=`w | grep $shortusr | cut -c10-14`
 
+	#Shortening tty to first 5 chars
+	#Cuts off extra tty's in case of multiple logins of same user and keeps first instance
+	tty=${tty:0:5}
+	
 	#If tty is empty, user is not logged in, so set tty and what accordingly
 	if (test "$tty" = "") then
 		tty="NOT ON"
 		what="-"
 	else
 		#If user is logged in, get user's current action from `w` command
-		what=`w | grep $shortusr | cut -c65-`
+		#In case of multiple logins of the same user, only gets what of first instance
+		what=`w | grep $shortusr | cut -c65- | head -1`
+		
 	fi
 
 	#Printing user info
