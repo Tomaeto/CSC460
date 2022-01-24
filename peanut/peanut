@@ -85,43 +85,38 @@ do
 	;;
 
 	"nutty")
-		#Prints phrase "BE THE 460 BEAR" in ASCII text, with 0.5 seconds between printing each word 
-		sleep 0.5
-		echo -n "
-██████╗ ███████╗    
-██╔══██╗██╔════╝    
-██████╔╝█████╗      
-██╔══██╗██╔══╝      
-██████╔╝███████╗    
-╚═════╝ ╚══════╝     "
+		#Prompts user to enter a word and appends it to a filename string
+		echo -n "Enter a word: "
+		read input
+		nutname="nutty_${input}"
+		
+		#If the file already exists in the directory, print error message
+		if (test -f $nutname) then
+			echo "Already exists, sorry"
+		else
 
-		sleep 0.5
-		echo -n "
-████████╗██╗  ██╗███████╗    
-╚══██╔══╝██║  ██║██╔════╝    
-   ██║   ███████║█████╗      
-   ██║   ██╔══██║██╔══╝      
-   ██║   ██║  ██║███████╗    
-   ╚═╝   ╚═╝  ╚═╝╚══════╝    "
+		#Otherwise, create file and build script to infinitely print input word
+			echo "while (true) do" >> $nutname
+			echo "echo -n \"$input \"" >> $nutname
+			echo "sleep 0.005" >> $nutname
+			echo "done" >> $nutname
+			chmod 755 $nutname
+			sleep 1
 
-		sleep 0.5
-		echo -n "
-██╗  ██╗ ██████╗  ██████╗     
-██║  ██║██╔════╝ ██╔═████╗    
-███████║███████╗ ██║██╔██║    
-╚════██║██╔═══██╗████╔╝██║    
-     ██║╚██████╔╝╚██████╔╝    
-     ╚═╝ ╚═════╝  ╚═════╝     "
-
-		sleep 0.5
-		echo "
-██████╗ ███████╗ █████╗ ██████╗ 
-██╔══██╗██╔════╝██╔══██╗██╔══██╗
-██████╔╝█████╗  ███████║██████╔╝
-██╔══██╗██╔══╝  ██╔══██║██╔══██╗
-██████╔╝███████╗██║  ██║██║  ██║
-╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝"
-		sleep 0.5
+		#After building script, ask user to run file
+			echo "Done (check nutstuff)"
+			echo -n "Run? (Y/N) "
+			read run
+		
+		#If yes, run file
+			if (test "$run" == "Y") then
+				echo "Ok (sorry)"
+				sleep 0.5
+				./$nutname
+			else
+				echo "Nevermind then"
+			fi
+		fi
 	;;
 
 	"peanutbutter")
