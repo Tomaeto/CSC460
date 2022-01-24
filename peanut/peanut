@@ -1,0 +1,145 @@
+#!/bin/bash
+
+#Adrian Faircloth
+#01/23/22
+#CSC460
+
+#Script 2: Peanut
+#Custom shell with specified set of commands
+
+
+#Clearing screen
+clear
+
+#Printing prompt and getting user input for command and arguments
+echo -n "Peanuts> "
+read input args
+
+#While user has not input exit command, check if input matches a command
+#	and run command, otherwise print error message
+while (test "$input" != "nutsout")
+do
+	#Case statement checking if input command matches any shell commands
+	case $input in
+	"showcase")
+		#Displaying contents of specified file on screen, allowing user to scroll
+		#	with arrow keys
+		less $args
+	;;
+
+	"nutcall")
+		#Getting phone number and full name of user based on input user ID
+		phone=`grep $args /etc/passwd | cut -d":" -f5 | cut -d"," -f3`
+		name=`grep $args /etc/passwd | cut -d":" -f5 | cut -d"," -f1`
+
+		#If user ID is not found in password file, print error message
+		#Otherwise, print user's full name and phone number
+		if (test "$name" = "") then
+			echo "Invalid user ID"
+		else
+			echo -e "$name \t $phone"
+		fi
+	;;
+
+	"nutlist")
+		#Getting list of unique users currently logged in
+		list=`who | cut -d" " -f1 | sort -u` 
+
+		#Printing header message
+		echo -e "\nCurrently logged in users:"
+
+		#For loop prints out full name of each user currently logged in
+		for user in $list
+		do
+			#Printing tab for formatting
+			echo -n -e "\t"
+
+			#Getting full name of each user logged in and printing to screen
+			echo  `grep $user /etc/passwd | cut -d":" -f5 | cut -d"," -f1`
+		done
+	;;
+
+	"nutstuff")
+		#Displaying contents of current directory using ls command
+		ls
+	;;
+
+	"helpnuts")
+		#Printing list of shell commands with syntax and action of each command (excluding bignut)
+		echo -e "
+		showcase filename      Displays named file on screen one page at a time, scroll with arrow keys.\n
+		nutcall userid         Displays full name and office phone number for given user ID.\n
+		nutlist                Displays full name of all currently logged in users.\n
+		nutstuff               Displays contents of current directory.\n
+		helpnuts               Displays commands available using the peanut shell.\n
+		nutty                  Does something interesting (hopefully).\n
+		peanutbutter filename  Opens filename in VI editor.\n
+		spybear arg            Calls spybear script. Accepts a list of user ID's, \"all\", or nothing as arg.\n
+		nutsout                Exit the peanut shell."
+	;;
+
+	"bignut")
+		#Escapes to a real bash shell from peanut
+		#Exiting from bash shell returns to peanut
+		bash
+	;;
+
+	"nutty")
+		#Prints phrase "BE THE 460 BEAR" in ASCII text, with 0.5 seconds between printing each word 
+		sleep 0.5
+		echo -n "
+██████╗ ███████╗    
+██╔══██╗██╔════╝    
+██████╔╝█████╗      
+██╔══██╗██╔══╝      
+██████╔╝███████╗    
+╚═════╝ ╚══════╝     "
+
+		sleep 0.5
+		echo -n "
+████████╗██╗  ██╗███████╗    
+╚══██╔══╝██║  ██║██╔════╝    
+   ██║   ███████║█████╗      
+   ██║   ██╔══██║██╔══╝      
+   ██║   ██║  ██║███████╗    
+   ╚═╝   ╚═╝  ╚═╝╚══════╝    "
+
+		sleep 0.5
+		echo -n "
+██╗  ██╗ ██████╗  ██████╗     
+██║  ██║██╔════╝ ██╔═████╗    
+███████║███████╗ ██║██╔██║    
+╚════██║██╔═══██╗████╔╝██║    
+     ██║╚██████╔╝╚██████╔╝    
+     ╚═╝ ╚═════╝  ╚═════╝     "
+
+		sleep 0.5
+		echo "
+██████╗ ███████╗ █████╗ ██████╗ 
+██╔══██╗██╔════╝██╔══██╗██╔══██╗
+██████╔╝█████╗  ███████║██████╔╝
+██╔══██╗██╔══╝  ██╔══██║██╔══██╗
+██████╔╝███████╗██║  ██║██║  ██║
+╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝"
+		sleep 0.5
+	;;
+
+	"peanutbutter")
+		#Opens given filename in VI
+		vi $args
+	;;
+
+	"spybear")
+		#Calls spybear with given argument(s)
+		./spybear $args
+	;;
+
+	*)
+		#Error message when input command does not match shell commands
+		echo -e "\tInvalid command, you buffoon (use helpnuts for list of commands)"
+	esac
+
+#Prompting user for next input
+echo -n "Peanuts> "
+read input args
+done
