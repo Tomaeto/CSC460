@@ -101,31 +101,17 @@ do
 		else
 
 		#Otherwise, create file and build script to infinitely print input word
+			echo "echo \"Sorry about this\"" >> $nutname
+			echo "sleep 1" >> $nutname	
 			echo "while (true) do" >> $nutname
 			echo "echo -n \"$input \"" >> $nutname
-			echo "sleep 0.5" >> $nutname
+			echo "sleep 0.0005" >> $nutname
 			echo "done" >> $nutname
 			chmod 755 $nutname
 			sleep 1
 		fi
 		done
-		#After building scripts, ask user to run them
 			echo "Done (check nutstuff)"
-			echo -n "Run? (You probably don't want to) (Y/N) "
-			read run
-		
-		#If yes, apologize for what is about to happen and run all scripts created in background
-			if (test "$run" == "Y") then
-				echo "Ok (sorry)"
-				sleep 0.5
-				for input in $words
-				do
-				nutname="nutty_${input}"
-				./$nutname &
-				done
-			else
-				echo "Nevermind then"
-			fi
 		
 	;;
 
