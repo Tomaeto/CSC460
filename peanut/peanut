@@ -85,9 +85,14 @@ do
 	;;
 
 	"nutty")
-		#Prompts user to enter a word and appends it to a filename string
-		echo -n "Enter a word: "
-		read input
+		#Prompts user to enter a word or list of words
+		echo -n "Enter a word (or words) (don't enter too many): "
+		read words
+
+		#For each input word, append to filename
+		for input in $words
+		do
+
 		nutname="nutty_${input}"
 		
 		#If the file already exists in the directory, print error message
@@ -98,25 +103,30 @@ do
 		#Otherwise, create file and build script to infinitely print input word
 			echo "while (true) do" >> $nutname
 			echo "echo -n \"$input \"" >> $nutname
-			echo "sleep 0.005" >> $nutname
+			echo "sleep 0.5" >> $nutname
 			echo "done" >> $nutname
 			chmod 755 $nutname
 			sleep 1
-
-		#After building script, ask user to run file
+		fi
+		done
+		#After building scripts, ask user to run them
 			echo "Done (check nutstuff)"
-			echo -n "Run? (Y/N) "
+			echo -n "Run? (You probably don't want to) (Y/N) "
 			read run
 		
-		#If yes, run file
+		#If yes, apologize for what is about to happen and run all scripts created in background
 			if (test "$run" == "Y") then
 				echo "Ok (sorry)"
 				sleep 0.5
-				./$nutname
+				for input in $words
+				do
+				nutname="nutty_${input}"
+				./$nutname &
+				done
 			else
 				echo "Nevermind then"
 			fi
-		fi
+		
 	;;
 
 	"peanutbutter")
