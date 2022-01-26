@@ -89,30 +89,34 @@ do
 		echo -n "Enter a word (or words) (don't enter too many): "
 		read words
 
-		#For each input word, append to filename
-		for input in $words
-		do
-
-		nutname="nutty_${input}"
+		
+		nutname="nutty_file"
 		
 		#If the file already exists in the directory, print error message
 		if (test -f $nutname) then
 			echo "Already exists, sorry"
 		else
 
-		#Otherwise, create file and build script to infinitely print input word
-			echo "echo \"Sorry about this\"" >> $nutname
-			echo "sleep 1" >> $nutname	
+		#Otherwise, create file and build script to infinitely print input list
 			echo "while (true) do" >> $nutname
-			echo "echo -n \"$input \"" >> $nutname
-			echo "sleep 0.0005" >> $nutname
+			echo "echo -n \"$words \"" >> $nutname
 			echo "done" >> $nutname
 			chmod 755 $nutname
 			sleep 1
 		fi
-		done
+			#After building script, ask user to run file
 			echo "Done (check nutstuff)"
-		
+			echo -n "Run program in background? (Y/N) "
+			read run
+
+			#If yes, run script in background
+			if (test "$run" = "Y") then
+				echo "Why would you do this"
+				sleep 0.5
+				./$nutname &
+			else
+				echo "Good choice."
+			fi
 	;;
 
 	"peanutbutter")
