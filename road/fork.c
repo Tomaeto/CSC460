@@ -2,7 +2,7 @@
 //Adrian Faircloth
 //CSC 460
 //1-28-22
-//Program 1: Fork in the Road
+//Project 1: Fork in the Road
 
 //Creates tree of processes w/ n generations
 //n passed in on command line
