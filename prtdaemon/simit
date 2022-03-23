@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#Adrian Faircloth
+#3-22-22
+#CSC460
+#Beasty Print Daemon: simit
+
+#simulates run of print daemon w/ multiple active users
+
+cc daemon.c -o daemon
+cc user.c -o user
+cc stop.c -o stop
+./daemon 5 &
+sleep 1
+./user &
+./user &
+./user &
+sleep 3
+./user &
+./user &
+
