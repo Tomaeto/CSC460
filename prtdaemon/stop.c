@@ -12,6 +12,7 @@
 
 //Defines for FULL sem and STOP value in shared memory
 #define FULL 1
+#define EMPTY 2
 #define STOP shmem[size+2].id
 
 //Struct for shared memory
@@ -42,7 +43,9 @@ main()
 //Setting stop var in shared memory to 1, signals daemon to break infinite loop and continue to reset shared resources
 	STOP = 1;
 
-//V on FULL to unblock daemon if buffer is empty
+//v on EMPTY to unblock user if buffer is full when stopped
+	v(EMPTY, sem_id);
+//v on FULL to unblock daemon if buffer is empty when stopped
 	v(FULL, sem_id);
 	return(0);
 }

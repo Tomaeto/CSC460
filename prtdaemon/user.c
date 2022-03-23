@@ -21,7 +21,7 @@
 #define SIZE size[0]
 #define FRONT shmem[SIZE].id
 #define REAR shmem[SIZE + 1].id
-
+#define STOP shmem[SIZE + 2].id
 //struct for shared memory, contains PID and filename of file w/ random quote
 struct usrData {
 	int id;
@@ -82,6 +82,8 @@ main()
 
 	//Syncing w/ daemon and other users 
 		p(EMPTY, sem_id);
+	//breaking loop if system is stopped while user is running
+		if (STOP !=0) break;	
 		p(MUTEX, sem_id);
 	//Critical Section
 	//adds user's PID and filename to buffer and Vs on FULL to allow daemon to access buffer and print quote
