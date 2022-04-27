@@ -48,7 +48,7 @@ main()
 		return(0);
 	}
 
-	fscanf("%d %d %d %d %d", &ramsize, &buf, &sem_id, &shmid, &ram_id);
+	fscanf(fp, "%d %d %d %d %d", &ramsize, &buf, &sem_id, &shmid, &ram_id);
 
 //Attatching to buffer and RAM
 	shmem = (struct product*) shmat(shmid, NULL, SHM_RND);

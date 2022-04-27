@@ -273,7 +273,7 @@ while(STOP == 0)
 		if (queue[i].pid != 0)
 			v(0, queue[i].semid);
 	}
-	shmctl(q_id, 0, IPC_RMID, 0);
+	shmctl(q_id, IPC_RMID, 0);
 }
 else
 {
